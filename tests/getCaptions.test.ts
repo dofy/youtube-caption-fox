@@ -34,11 +34,11 @@ describe("getCaptions", () => {
   it("should fetch captions using a proxy if specified", async () => {
     const videoId = "S3RqQEo9PiA";
     const proxy = {
-      host: "gate-us.ipfoxy.io",
-      port: 58688,
+      host: "proxy.example.com",
+      port: 8080,
       auth: {
-        username: "customer-6M0GmwEyeM",
-        password: "yEDJCFv46qgLPUh",
+        username: "username",
+        password: "password",
       },
     };
 

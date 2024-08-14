@@ -1,6 +1,6 @@
 {
   "name": "@dofy/youtube-caption-fox",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "A simple Node.js library for fetching YouTube video captions with ease.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -29,7 +29,7 @@
     "@babel/preset-env": "^7.25.3",
     "@types/cheerio": "^0.22.35",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.3.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.4",
     "typescript": "^5.0.0"

@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import * as cheerio from "cheerio";
-import { Script } from "vm";
 
 interface ProxyOptions {
   host: string;
@@ -42,8 +41,6 @@ export const getCaptions = async (
 
     // 获取视频页面内容
     const response = await axios.get(url, config);
-    options?.proxy && console.log("🚀 ~ response:", response)
-
     // 使用 Cheerio 解析 HTML 内容
     const $ = cheerio.load(response.data);
 
@@ -54,7 +51,7 @@ export const getCaptions = async (
     }
 
     // 获取并解析字幕内容
-    const captionsResponse = await axios.get(captionsUrl);
+    const captionsResponse = await axios.get(captionsUrl, config);
     const captions = parseCaptions(captionsResponse.data);
 
     return captions;
