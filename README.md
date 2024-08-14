@@ -101,4 +101,4 @@ Contributions are welcome! Please submit a pull request or open an issue to disc
 
 ## Issues
 
-If you encounter any issues or have feature requests, please feel free to [open an issue](https://github.com/yourusername/youtube-caption-fox/issues) on GitHub.
+If you encounter any issues or have feature requests, please feel free to [open an issue](https://github.com/dofy/youtube-caption-fox/issues) on GitHub.
