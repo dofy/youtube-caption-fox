@@ -15,7 +15,8 @@
     "framer-motion": "^11.3.28",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "@dofy/youtube-caption-fox": "file:../dist/index.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.3.0",
