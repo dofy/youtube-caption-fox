@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="w-full justify-center flex flex-col  ">
+    <main className="flex w-full flex-col justify-center">
       <header className="bg-red-200">
         <h1 className="text-2xl">Sample</h1>
       </header>
@@ -13,5 +13,5 @@ export default function Home() {
         <p>This is a sample section.</p>
       </section>
     </main>
-  )
+  );
 }
