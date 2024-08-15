@@ -1,15 +1,15 @@
 export default function Home() {
   return (
-    <main className="flex w-full flex-col justify-center">
-      <header className="bg-red-200">
-        <h1 className="text-2xl">Sample</h1>
+    <main className="flex w-full flex-col gap-8 p-8">
+      <header className="py-4">
+        <h1 className="text-4xl font-medium">@dofy/youtube-cation-fox demo</h1>
       </header>
       <section>
-        <h1>Sample</h1>
+        <h3 className="text-2xl">Form</h3>
         <p>This is a sample page.</p>
       </section>
       <section>
-        <h2>Sample</h2>
+        <h3 className="text-2xl">Result</h3>
         <p>This is a sample section.</p>
       </section>
     </main>
