@@ -21,6 +21,19 @@ interface Caption {
   text: string
 }
 
+type CaptionTrack = {
+  baseUrl: string
+  languageCode: string
+}
+
+type PlayerData = {
+  captions?: {
+    playerCaptionsTracklistRenderer?: {
+      captionTracks?: CaptionTrack[]
+    }
+  }
+}
+
 export const getCaptions = async (
   videoId: string,
   options?: GetCaptionsOptions
@@ -79,8 +92,7 @@ function findCaptionsUrl($: cheerio.Root, lang?: string): string | null {
     return null
   }
 
-  const playerData = JSON.parse(jsonStr[1])
-
+  const playerData: PlayerData = JSON.parse(jsonStr[1])
   // 提取字幕 URL，根据语言筛选
   const captionsTracks =
     playerData?.captions?.playerCaptionsTracklistRenderer?.captionTracks
@@ -89,7 +101,7 @@ function findCaptionsUrl($: cheerio.Root, lang?: string): string | null {
   }
 
   const track =
-    captionsTracks.find((t: any) => t.languageCode === lang) ||
+    captionsTracks.find((t: CaptionTrack) => t.languageCode === lang) ||
     captionsTracks[0]
   return track?.baseUrl || null
 }
