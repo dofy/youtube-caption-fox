@@ -1,12 +1,12 @@
 export type ProxyConfig = {
-  host: string
-  port: number
+  host?: string
+  port?: number
   auth?: ProxyAuthConfig
 }
 
 export type ProxyAuthConfig = {
-  username: string
-  password: string
+  username?: string
+  password?: string
 }
 
 export type FormData = {

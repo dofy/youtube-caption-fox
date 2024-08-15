@@ -1,8 +1,7 @@
 'use client'
 
 import { FC, useState } from 'react'
-import { FormData } from '../types'
-import React from 'react'
+import { FormData, ProxyAuthConfig, ProxyConfig } from '../types'
 
 interface FormViewProps {
   onSubmit: (data: FormData) => void
@@ -15,12 +14,37 @@ const DefaultFormData: FormData = {
 
 export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
   const [viaProxy, setViaProxy] = useState(false)
-  const [submitData, setSubmitData] = useState<FormData>({
-    ...DefaultFormData,
-  })
+  const [proxyConfig, setProxyConfig] = useState<ProxyConfig>({})
+  const [authData, setAuthData] = useState<ProxyAuthConfig>({})
+  const [submitData, setSubmitData] = useState<FormData>(DefaultFormData)
 
   const handleSubmit = () => {
-    onSubmit(submitData)
+    const fullData = {
+      ...submitData,
+      proxy: viaProxy ? { ...proxyConfig, auth: authData } : undefined,
+    }
+    onSubmit(fullData)
+  }
+
+  const updateSubmitData = (key: keyof FormData, value: string) => {
+    setSubmitData((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
+  }
+
+  const updateProxyConfig = (key: keyof ProxyConfig, value: string) => {
+    setProxyConfig((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
+  }
+
+  const updateAuthData = (key: keyof ProxyAuthConfig, value: string) => {
+    setAuthData((prev) => ({
+      ...prev,
+      [key]: value,
+    }))
   }
 
   return (
@@ -33,13 +57,9 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
         <input
           type="text"
           id="videoId"
+          placeholder="e.g. dQw4w9WgXcQ"
           value={submitData.videoId}
-          onChange={(evt) =>
-            setSubmitData((prev) => ({
-              ...prev,
-              videoId: evt.target.value,
-            }))
-          }
+          onChange={(evt) => updateSubmitData('videoId', evt.target.value)}
           className="rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
         />
       </div>
@@ -50,6 +70,9 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
         <input
           type="text"
           id="lang"
+          placeholder="e.g. en for English, ja for Japanese"
+          value={submitData.lang}
+          onChange={(evt) => updateSubmitData('lang', evt.target.value)}
           className="rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
         />
       </div>
@@ -78,6 +101,9 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
             <input
               type="text"
               id="proxyHost"
+              placeholder='e.g. "http://proxy.example.com"'
+              value={proxyConfig.host}
+              onChange={(evt) => updateProxyConfig('host', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -89,8 +115,11 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               Proxy Port
             </label>
             <input
-              type="text"
+              type="decimal"
               id="proxyPort"
+              placeholder="e.g. 8080"
+              value={proxyConfig.port}
+              onChange={(evt) => updateProxyConfig('port', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -104,6 +133,9 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
             <input
               type="text"
               id="proxyUser"
+              placeholder="e.g. proxyuser"
+              value={authData.username}
+              onChange={(evt) => updateAuthData('username', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -117,6 +149,9 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
             <input
               type="password"
               id="proxyPass"
+              placeholder="e.g. password"
+              value={authData.password}
+              onChange={(evt) => updateAuthData('password', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
