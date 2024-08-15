@@ -1,5 +1,3 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
-export const GET = async (req: NextRequest): Promise<NextResponse> => {
-  
-};
+export const GET = async (req: NextRequest): Promise<NextResponse> => {}

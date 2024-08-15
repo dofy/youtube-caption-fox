@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
     "next": "14.2.5",
