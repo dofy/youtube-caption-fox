@@ -24,16 +24,16 @@ npm install @dofy/youtube-caption-fox
 Here's an example of how to use `@dofy/youtube-caption-fox` to fetch captions for a YouTube video:
 
 ```javascript
-import { getCaptions } from "@dofy/youtube-caption-fox";
+import { getCaptions } from '@dofy/youtube-caption-fox';
 
-const videoId = "your-video-id";
+const videoId = 'your-video-id';
 
 getCaptions(videoId)
   .then((captions) => {
-    console.log("Captions:", captions);
+    console.log('Captions:', captions);
   })
   .catch((error) => {
-    console.error("Error fetching captions:", error);
+    console.error('Error fetching captions:', error);
   });
 ```
 
@@ -42,27 +42,27 @@ getCaptions(videoId)
 If you are behind a proxy, you can configure the library to use it:
 
 ```javascript
-import { getCaptions } from "@dofy/youtube-caption-fox";
+import { getCaptions } from '@dofy/youtube-caption-fox';
 
-const videoId = "your-video-id";
+const videoId = 'your-video-id';
 
 const options = {
   proxy: {
-    host: "proxy-server-address",
+    host: 'proxy-server-address',
     port: 8080,
     auth: {
-      username: "your-username",
-      password: "your-password",
+      username: 'your-username',
+      password: 'your-password',
     },
   },
 };
 
 getCaptions(videoId, options)
   .then((captions) => {
-    console.log("Captions:", captions);
+    console.log('Captions:', captions);
   })
   .catch((error) => {
-    console.error("Error fetching captions:", error);
+    console.error('Error fetching captions:', error);
   });
 ```
 
@@ -78,9 +78,9 @@ Returns a promise that resolves with the captions data or rejects with an error.
 ## Example
 
 ```javascript
-import { getCaptions } from "@dofy/youtube-caption-fox";
+import { getCaptions } from '@dofy/youtube-caption-fox';
 
-const videoId = "your-video-id";
+const videoId = 'your-video-id';
 
 getCaptions(videoId)
   .then((captions) => {

@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
-import * as cheerio from "cheerio";
+import axios, { AxiosRequestConfig } from 'axios';
+import * as cheerio from 'cheerio';
 
 interface ProxyOptions {
   host: string;
@@ -62,9 +62,9 @@ export const getCaptions = async (
 
 function findCaptionsUrl($: cheerio.Root, lang?: string): string | null {
   // 查找页面中的字幕信息
-  const playerResponse = $("script")
+  const playerResponse = $('script')
     .filter((_, script: cheerio.Element) => {
-      return $(script).html()?.includes("ytInitialPlayerResponse")!;
+      return $(script).html()?.includes('ytInitialPlayerResponse')!;
     })
     .html();
 
@@ -99,9 +99,9 @@ function parseCaptions(data: string): Caption[] {
   const $ = cheerio.load(data, { xmlMode: true });
   const captions: Caption[] = [];
 
-  $("transcript > text").each((_, element) => {
-    const start = parseFloat($(element).attr("start") || "0");
-    const dur = parseFloat($(element).attr("dur") || "0");
+  $('transcript > text').each((_, element) => {
+    const start = parseFloat($(element).attr('start') || '0');
+    const dur = parseFloat($(element).attr('dur') || '0');
     const text = $(element).text();
 
     captions.push({ start, dur, text });
