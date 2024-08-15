@@ -13,5 +13,5 @@ export default function Home() {
         <p>This is a sample section.</p>
       </section>
     </main>
-  )
+  );
 }
