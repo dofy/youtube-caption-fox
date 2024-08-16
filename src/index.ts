@@ -87,3 +87,5 @@ function parseCaptions(data: string): Caption[] {
 
   return captions
 }
+
+export * from './types'

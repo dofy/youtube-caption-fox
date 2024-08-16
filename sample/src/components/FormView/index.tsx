@@ -1,8 +1,9 @@
 'use client'
 
-import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox/types'
+// import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
 import { FC, useState } from 'react'
 import { FormData } from '../types'
+import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
 
 interface FormViewProps {
   onSubmit: (data: FormData) => void
