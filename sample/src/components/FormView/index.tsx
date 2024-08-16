@@ -1,7 +1,8 @@
 'use client'
 
+import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox/types'
 import { FC, useState } from 'react'
-import { FormData, ProxyAuthConfig, ProxyConfig } from '../types'
+import { FormData } from '../types'
 
 interface FormViewProps {
   onSubmit: (data: FormData) => void
@@ -10,18 +11,21 @@ interface FormViewProps {
 const DefaultFormData: FormData = {
   videoId: '',
   lang: '',
+  proxy: false,
 }
 
 export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
   const [viaProxy, setViaProxy] = useState(false)
-  const [proxyConfig, setProxyConfig] = useState<ProxyConfig>({})
-  const [authData, setAuthData] = useState<ProxyAuthConfig>({})
+  const [proxyConfig, setProxyConfig] = useState<ProxyOptions>({
+    host: '',
+    port: 8080,
+  })
   const [submitData, setSubmitData] = useState<FormData>(DefaultFormData)
 
   const handleSubmit = () => {
     const fullData = {
       ...submitData,
-      proxy: viaProxy ? { ...proxyConfig, auth: authData } : undefined,
+      proxy: viaProxy && proxyConfig,
     }
     onSubmit(fullData)
   }
@@ -33,17 +37,23 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
     }))
   }
 
-  const updateProxyConfig = (key: keyof ProxyConfig, value: string) => {
+  const updateProxyConfig = (
+    key: keyof ProxyOptions,
+    value: string | number
+  ) => {
     setProxyConfig((prev) => ({
       ...prev,
       [key]: value,
     }))
   }
 
-  const updateAuthData = (key: keyof ProxyAuthConfig, value: string) => {
-    setAuthData((prev) => ({
+  const updateAuthData = (key: keyof AuthOptions, value: string) => {
+    setProxyConfig((prev) => ({
       ...prev,
-      [key]: value,
+      auth: {
+        ...prev.auth!,
+        [key]: value,
+      },
     }))
   }
 
@@ -102,7 +112,7 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="text"
               id="proxyHost"
               placeholder='e.g. "http://proxy.example.com"'
-              value={proxyConfig.host}
+              value={proxyConfig?.host}
               onChange={(evt) => updateProxyConfig('host', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
@@ -134,7 +144,7 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="text"
               id="proxyUser"
               placeholder="e.g. proxyuser"
-              value={authData.username}
+              value={proxyConfig.auth?.username}
               onChange={(evt) => updateAuthData('username', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
@@ -150,7 +160,7 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="password"
               id="proxyPass"
               placeholder="e.g. password"
-              value={authData.password}
+              value={proxyConfig.auth?.password}
               onChange={(evt) => updateAuthData('password', evt.target.value)}
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />

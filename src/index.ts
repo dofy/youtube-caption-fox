@@ -1,38 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as cheerio from 'cheerio'
-
-interface ProxyOptions {
-  host: string
-  port: number
-  auth?: {
-    username: string
-    password: string
-  }
-}
-
-interface GetCaptionsOptions {
-  proxy?: ProxyOptions
-  lang?: string // 字幕语言选项，例如 "en" 或 "fr"
-}
-
-interface Caption {
-  start: number
-  dur: number
-  text: string
-}
-
-type CaptionTrack = {
-  baseUrl: string
-  languageCode: string
-}
-
-type PlayerData = {
-  captions?: {
-    playerCaptionsTracklistRenderer?: {
-      captionTracks?: CaptionTrack[]
-    }
-  }
-}
+import { Caption, CaptionTrack, GetCaptionsOptions, PlayerData } from './types'
 
 export const getCaptions = async (
   videoId: string,
@@ -41,19 +9,16 @@ export const getCaptions = async (
   try {
     const url = `https://www.youtube.com/watch?v=${videoId}`
 
-    // 配置 Axios 请求
-    const config: AxiosRequestConfig = {}
-
-    if (options?.proxy) {
-      config.proxy = {
-        host: options.proxy.host,
-        port: options.proxy.port,
-        auth: options.proxy.auth,
-      }
+    const axiosRequestConfig: AxiosRequestConfig = {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+      },
+      proxy: options?.proxy,
     }
 
     // 获取视频页面内容
-    const response = await axios.get(url, config)
+    const response = await axios.get(url, axiosRequestConfig)
     // 使用 Cheerio 解析 HTML 内容
     const $ = cheerio.load(response.data)
 
@@ -64,16 +29,17 @@ export const getCaptions = async (
     }
 
     // 获取并解析字幕内容
-    const captionsResponse = await axios.get(captionsUrl, config)
+    const captionsResponse = await axios.get(captionsUrl, axiosRequestConfig)
     const captions = parseCaptions(captionsResponse.data)
 
     return captions
-  } catch (_error) {
+  } catch (error) {
+    console.log('Error:', (error as Error).message)
     return []
   }
 }
 
-function findCaptionsUrl($: cheerio.Root, lang?: string): string | null {
+function findCaptionsUrl($: cheerio.Root, lang: string = 'en'): string | null {
   // 查找页面中的字幕信息
   const playerResponse = $('script')
     .filter((_, script: cheerio.Element) => {
