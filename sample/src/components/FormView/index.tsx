@@ -1,60 +1,34 @@
 'use client'
 
 // import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
-import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
 import { FC, useState } from 'react'
 import { FormData } from '../types'
 
 interface FormViewProps {
+  isLoading: boolean
   onSubmit: (data: FormData) => void
 }
 
 const DefaultFormData: FormData = {
   videoId: '',
   lang: '',
-  proxy: false,
+  useProxy: false,
 }
 
-export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
-  const [viaProxy, setViaProxy] = useState(false)
-  const [proxyConfig, setProxyConfig] = useState<ProxyOptions>({
-    host: '',
-    port: 8080,
-  })
+export const FormView: FC<FormViewProps> = ({ isLoading, onSubmit }) => {
   const [submitData, setSubmitData] = useState<FormData>(DefaultFormData)
 
   const handleSubmit = () => {
-    const fullData = {
-      ...submitData,
-      proxy: viaProxy && proxyConfig,
-    }
-    onSubmit(fullData)
+    onSubmit(submitData)
   }
 
-  const updateSubmitData = (key: keyof FormData, value: string) => {
+  const updateSubmitData = (
+    key: keyof FormData,
+    value: string | boolean | number
+  ) => {
     setSubmitData((prev) => ({
       ...prev,
       [key]: value,
-    }))
-  }
-
-  const updateProxyConfig = (
-    key: keyof ProxyOptions,
-    value: string | number
-  ) => {
-    setProxyConfig((prev) => ({
-      ...prev,
-      [key]: value,
-    }))
-  }
-
-  const updateAuthData = (key: keyof AuthOptions, value: string) => {
-    setProxyConfig((prev) => ({
-      ...prev,
-      auth: {
-        ...prev.auth!,
-        [key]: value,
-      },
     }))
   }
 
@@ -92,16 +66,18 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
           <input
             type="checkbox"
             id="useProxy"
-            checked={viaProxy}
+            checked={submitData.useProxy}
             className="h-5 w-5"
-            onChange={(evt) => setViaProxy(evt.target.checked)}
+            onChange={(evt) => updateSubmitData('useProxy', evt.target.checked)}
           />
           <label htmlFor="useProxy" className="text-lg">
             Use Proxy
           </label>
         </div>
 
-        <section className={`flex-col gap-4 ${viaProxy ? 'flex' : 'hidden'}`}>
+        <section
+          className={`flex-col gap-4 ${submitData.useProxy ? 'flex' : 'hidden'}`}
+        >
           <div className="flex items-center gap-4">
             <label
               htmlFor="proxyHost"
@@ -113,8 +89,10 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="text"
               id="proxyHost"
               placeholder='e.g. "http://proxy.example.com"'
-              value={proxyConfig?.host}
-              onChange={(evt) => updateProxyConfig('host', evt.target.value)}
+              value={submitData.proxyHost}
+              onChange={(evt) =>
+                updateSubmitData('proxyHost', evt.target.value)
+              }
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -129,8 +107,10 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="decimal"
               id="proxyPort"
               placeholder="e.g. 8080"
-              value={proxyConfig.port}
-              onChange={(evt) => updateProxyConfig('port', evt.target.value)}
+              value={submitData.proxyPort}
+              onChange={(evt) =>
+                updateSubmitData('proxyPort', evt.target.value)
+              }
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -145,8 +125,10 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="text"
               id="proxyUser"
               placeholder="e.g. proxyuser"
-              value={proxyConfig.auth?.username}
-              onChange={(evt) => updateAuthData('username', evt.target.value)}
+              value={submitData.proxyUsername}
+              onChange={(evt) =>
+                updateSubmitData('proxyUsername', evt.target.value)
+              }
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -161,8 +143,10 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
               type="password"
               id="proxyPass"
               placeholder="e.g. password"
-              value={proxyConfig.auth?.password}
-              onChange={(evt) => updateAuthData('password', evt.target.value)}
+              value={submitData.proxyPassword}
+              onChange={(evt) =>
+                updateSubmitData('proxyPassword', evt.target.value)
+              }
               className="flex-1 rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
             />
           </div>
@@ -170,10 +154,11 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
       </div>
       <div className="flex">
         <button
+          disabled={isLoading}
           onClick={handleSubmit}
-          className="flex-1 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          Submit
+          {isLoading ? 'Loading...' : 'Submit'}
         </button>
       </div>
     </section>

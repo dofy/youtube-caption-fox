@@ -9,18 +9,22 @@ import { Caption } from '@dofy/youtube-caption-fox'
 
 export const HomeView: FC = () => {
   const [captions, setCaptions] = useState<Caption[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = (data: FormData) => {
-    fetch(`/api/getCaptions?videoId=${data.videoId}&lang=${data.lang}`)
+    setIsLoading(true)
+    const urlSearch = new URLSearchParams(data as any)
+    fetch(`/api/getCaptions?${urlSearch.toString()}`)
       .then((response) => response.json())
       .then(setCaptions)
       .catch(console.error)
+      .finally(() => setIsLoading(false))
   }
 
   return (
     <main className="mx-auto flex max-w-screen-lg flex-col gap-8 p-8">
       <HeaderView />
-      <FormView onSubmit={onSubmit} />
+      <FormView isLoading={isLoading} onSubmit={onSubmit} />
       <ResultView captions={captions} />
     </main>
   )
