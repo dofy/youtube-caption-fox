@@ -50,6 +50,7 @@ const options = {
   proxy: {
     host: 'proxy-server-address',
     port: 8080,
+    protocol: 'http',
     auth: {
       username: 'your-username',
       password: 'your-password',
