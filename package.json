@@ -1,12 +1,11 @@
 {
   "name": "@dofy/youtube-caption-fox",
-  "version": "1.2.10",
+  "version": "1.3.1",
   "description": "A simple Node.js library for fetching YouTube video captions with ease.",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
-    "build": "tsc && babel dist --out-dir dist --extensions '.js' --out-file-extension .mjs",
+    "build": "tsc",
     "start": "node dist/index.mjs",
     "test": "jest",
     "format": "prettier --write .",

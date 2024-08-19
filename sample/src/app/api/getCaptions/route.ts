@@ -1,9 +1,7 @@
 import {
-  Caption,
   getCaptions,
-  GetCaptionsOptions,
+  GetCaptionsOptions
 } from '@dofy/youtube-caption-fox'
-import { get } from 'http'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (req: NextRequest) => {
