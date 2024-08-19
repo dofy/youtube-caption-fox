@@ -1,12 +1,12 @@
+import { getCaptions } from '@dofy/youtube-caption-fox'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const GET = (req: NextRequest, options: { params: any }) => {
-  console.log('🚀 ~ GET ~ options:', options)
-  console.log('🚀 ~ GET ~ req:', )
-  const captions = [
-    { id: 1, text: '這是一個字幕' },
-    { id: 2, text: '這是另一個字幕' },
-  ]
+export const GET = async (req: NextRequest) => {
+  const searchParams = req.nextUrl.searchParams
+  const videoId = searchParams.get('videoId') || ''
+  const lang = searchParams.get('lang') || 'en'
+
+  const captions = await getCaptions(videoId, { lang })
 
   return NextResponse.json(captions)
 }

@@ -10,13 +10,8 @@ export const getCaptions = async (
     const url = `https://www.youtube.com/watch?v=${videoId}`
 
     const axiosRequestConfig: AxiosRequestConfig = {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-      },
       proxy: options?.proxy,
     }
-
     // 获取视频页面内容
     const response = await axios.get(url, axiosRequestConfig)
     // 使用 Cheerio 解析 HTML 内容
@@ -65,9 +60,8 @@ function findCaptionsUrl($: cheerio.Root, lang: string = 'en'): string | null {
   if (!captionsTracks || captionsTracks.length === 0) {
     return null
   }
-
   const track =
-    captionsTracks.find((t: CaptionTrack) => t.languageCode === lang) ||
+    captionsTracks.find((t: CaptionTrack) => t.languageCode.startsWith(lang)) ||
     captionsTracks[0]
   return track?.baseUrl || null
 }
