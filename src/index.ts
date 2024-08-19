@@ -60,9 +60,11 @@ function findCaptionsUrl($: cheerio.Root, lang: string = 'en'): string | null {
   if (!captionsTracks || captionsTracks.length === 0) {
     return null
   }
+
   const track =
-    captionsTracks.find((t: CaptionTrack) => t.languageCode.startsWith(lang)) ||
-    captionsTracks[0]
+    captionsTracks.find((t: CaptionTrack) =>
+      t.languageCode.toLowerCase().startsWith(lang.toLowerCase())
+    ) || captionsTracks[0]
   return track?.baseUrl || null
 }
 

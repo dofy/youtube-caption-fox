@@ -1,9 +1,9 @@
 'use client'
 
 // import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
+import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
 import { FC, useState } from 'react'
 import { FormData } from '../types'
-import { AuthOptions, ProxyOptions } from '@dofy/youtube-caption-fox'
 
 interface FormViewProps {
   onSubmit: (data: FormData) => void
@@ -68,7 +68,7 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
         <input
           type="text"
           id="videoId"
-          placeholder="e.g. dQw4w9WgXcQ"
+          placeholder="e.g. 5I1jTJ9sYeA"
           value={submitData.videoId}
           onChange={(evt) => updateSubmitData('videoId', evt.target.value)}
           className="rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
@@ -81,7 +81,7 @@ export const FormView: FC<FormViewProps> = ({ onSubmit }) => {
         <input
           type="text"
           id="lang"
-          placeholder="e.g. en for English, ja for Japanese"
+          placeholder="e.g. en for English, zh for Chinese, ja for Japanese"
           value={submitData.lang}
           onChange={(evt) => updateSubmitData('lang', evt.target.value)}
           className="rounded-lg bg-white/70 p-2 focus:outline-none focus:ring-2 focus:ring-black/50"
