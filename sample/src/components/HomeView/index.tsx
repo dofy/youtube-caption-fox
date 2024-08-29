@@ -1,14 +1,14 @@
 'use client'
 
+import { VideoInfo } from '@dofy/youtube-caption-fox'
 import { FC, useState } from 'react'
 import { FormView } from '../FormView'
 import { HeaderView } from '../HeaderView'
 import { ResultView } from '../ResultView'
 import type { FormData } from '../types'
-import { Caption } from '@dofy/youtube-caption-fox'
 
 export const HomeView: FC = () => {
-  const [captions, setCaptions] = useState<Caption[]>([])
+  const [videoInfo, setVideoInfo] = useState<VideoInfo>()
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = (data: FormData) => {
@@ -16,7 +16,7 @@ export const HomeView: FC = () => {
     const urlSearch = new URLSearchParams(data as any)
     fetch(`/api/getCaptions?${urlSearch.toString()}`)
       .then((response) => response.json())
-      .then(setCaptions)
+      .then(setVideoInfo)
       .catch(console.error)
       .finally(() => setIsLoading(false))
   }
@@ -25,7 +25,7 @@ export const HomeView: FC = () => {
     <main className="mx-auto flex max-w-screen-lg flex-col gap-8 p-8">
       <HeaderView />
       <FormView isLoading={isLoading} onSubmit={onSubmit} />
-      <ResultView captions={captions} />
+      {videoInfo && <ResultView video={videoInfo} />}
     </main>
   )
 }

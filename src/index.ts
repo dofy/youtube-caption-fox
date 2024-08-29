@@ -19,11 +19,12 @@ export type GetCaptionsOptions = {
 }
 
 export type VideoInfo = {
-  title: string
-  description: string
-  cover: string
+  id: string
+  title?: string
+  description?: string
+  cover?: string
+  publishDate?: string
   captions: Caption[]
-  publishDate: string
 }
 
 export type Caption = {
@@ -60,12 +61,6 @@ export const getCaptions = async (
     // 使用 Cheerio 解析 HTML 内容
     const $ = cheerio.load(response.data)
 
-    // 查找字幕信息
-    const captionsUrl = findCaptionsUrl($, options?.lang)
-    if (!captionsUrl) {
-      throw new Error(`Captions not found for video ID: ${videoId}`)
-    }
-
     // 获取视频标题
     const title = $('meta[name="title"]').attr('content') || ''
     // 获取视频描述
@@ -76,19 +71,41 @@ export const getCaptions = async (
     const publishDate =
       $('meta[itemprop="datePublished"]').attr('content') || ''
 
+    // 查找字幕信息
+    const captionsUrl = findCaptionsUrl($, options?.lang)
+    if (!captionsUrl) {
+      console.error(`Captions not found for video ID: ${videoId}`)
+      return {
+        id: videoId,
+        title,
+        description,
+        cover: thumbnail,
+        publishDate,
+        captions: [],
+      }
+    }
+
     // 获取并解析字幕内容
     const captionsResponse = await axios.get(captionsUrl, axiosRequestConfig)
     const captions = parseCaptions(captionsResponse.data)
 
-    return { captions, title, description, cover: thumbnail, publishDate }
-  } catch (error) {
-    console.log('Error:', (error as Error).message)
     return {
-      captions: [],
+      id: videoId,
+      title,
+      description,
+      cover: thumbnail,
+      publishDate,
+      captions,
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      id: videoId,
       title: '',
       description: '',
       cover: '',
       publishDate: '',
+      captions: [],
     }
   }
 }

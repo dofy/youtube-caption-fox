@@ -1,16 +1,19 @@
 'use client'
 
-import { Caption } from '@dofy/youtube-caption-fox'
+import { VideoInfo } from '@dofy/youtube-caption-fox'
 import { FC } from 'react'
 
 interface ResultViewProps {
-  captions: Caption[]
+  video: VideoInfo
 }
 
-export const ResultView: FC<ResultViewProps> = ({ captions }) => {
+export const ResultView: FC<ResultViewProps> = ({ video }) => {
+  const { title, captions } = video
+
   return (
     <section className="flex flex-col gap-4 rounded-lg bg-blue-200/30 p-4">
-      <h3 className="text-2xl font-semibold">Result</h3>
+      <h2 className="text-2xl font-semibold">Result</h2>
+      <h3 className="text-xl font-semibold">{title}</h3>
       {captions.length > 0 ? (
         <ul className="flex flex-col gap-2">
           {captions.map((caption, index) => (
