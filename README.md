@@ -29,7 +29,7 @@ import { getCaptions } from '@dofy/youtube-caption-fox'
 const videoId = 'your-video-id'
 
 getCaptions(videoId)
-  .then((captions) => {
+  .then(({ captions }) => {
     console.log('Captions:', captions)
   })
   .catch((error) => {
@@ -59,7 +59,7 @@ const options = {
 }
 
 getCaptions(videoId, options)
-  .then((captions) => {
+  .then(({ captions }) => {
     console.log('Captions:', captions)
   })
   .catch((error) => {
@@ -84,7 +84,7 @@ import { getCaptions } from '@dofy/youtube-caption-fox'
 const videoId = 'your-video-id'
 
 getCaptions(videoId)
-  .then((captions) => {
+  .then(({ captions }) => {
     console.log(captions) // Captions data in JSON format
   })
   .catch((error) => {

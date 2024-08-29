@@ -4,7 +4,7 @@ describe('getCaptions', () => {
   it('should fetch captions for a valid YouTube video ID', async () => {
     const videoId = '5I1jTJ9sYeA'
 
-    const captions = await getCaptions(videoId, { lang: 'en' })
+    const { captions } = await getCaptions(videoId, { lang: 'en' })
     expect(captions).toBeDefined()
     expect(captions.length).toBeGreaterThan(0)
     expect(captions[0]).toHaveProperty('start')
@@ -22,7 +22,7 @@ describe('getCaptions', () => {
 
   it('should fetch captions in a different language if specified', async () => {
     const videoId = '5I1jTJ9sYeA'
-    const captions = await getCaptions(videoId, { lang: 'zh' })
+    const { captions } = await getCaptions(videoId, { lang: 'zh' })
 
     expect(captions).toBeDefined()
     expect(captions.length).toBeGreaterThan(0)
@@ -42,7 +42,7 @@ describe('getCaptions', () => {
       },
     }
 
-    const captions = await getCaptions(videoId, { proxy })
+    const { captions } = await getCaptions(videoId, { proxy })
 
     expect(captions).toBeDefined()
     expect(captions.length).toBeGreaterThan(0)

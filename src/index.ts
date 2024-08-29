@@ -18,6 +18,14 @@ export type GetCaptionsOptions = {
   lang?: string // 字幕语言选项，例如 "en" 或 "fr"
 }
 
+export type VideoInfo = {
+  title: string
+  description: string
+  cover: string
+  captions: Caption[]
+  publishDate: string
+}
+
 export type Caption = {
   start: number
   dur: number
@@ -40,7 +48,7 @@ export type PlayerData = {
 export const getCaptions = async (
   videoId: string,
   options?: GetCaptionsOptions
-): Promise<Caption[]> => {
+): Promise<VideoInfo> => {
   try {
     const url = `https://www.youtube.com/watch?v=${videoId}`
 
@@ -58,14 +66,30 @@ export const getCaptions = async (
       throw new Error(`Captions not found for video ID: ${videoId}`)
     }
 
+    // 获取视频标题
+    const title = $('meta[name="title"]').attr('content') || ''
+    // 获取视频描述
+    const description = $('meta[name="description"]').attr('content') || ''
+    // 获取视频封面图
+    const thumbnail = $('meta[property="og:image"]').attr('content') || ''
+    // 获取视频发布时间
+    const publishDate =
+      $('meta[itemprop="datePublished"]').attr('content') || ''
+
     // 获取并解析字幕内容
     const captionsResponse = await axios.get(captionsUrl, axiosRequestConfig)
     const captions = parseCaptions(captionsResponse.data)
 
-    return captions
+    return { captions, title, description, cover: thumbnail, publishDate }
   } catch (error) {
     console.log('Error:', (error as Error).message)
-    return []
+    return {
+      captions: [],
+      title: '',
+      description: '',
+      cover: '',
+      publishDate: '',
+    }
   }
 }
 
