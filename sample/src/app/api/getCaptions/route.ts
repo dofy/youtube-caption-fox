@@ -1,33 +1,14 @@
-import { getCaptions, GetCaptionsOptions } from '@dofy/youtube-caption-fox'
+import { getCaptions } from '@dofy/youtube-caption-fox'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const GET = async (req: NextRequest) => {
-  const searchParams = req.nextUrl.searchParams
-  const videoId = searchParams.get('videoId') || ''
-  const lang = searchParams.get('lang') || 'en'
-  const useProxy = searchParams.get('useProxy') === 'true'
-  const proxyHost = searchParams.get('proxyHost')
-  const proxyPort = searchParams.get('proxyPort')
-  const proxyUsername = searchParams.get('proxyUsername')
-  const proxyPassword = searchParams.get('proxyPassword')
+export const dynamic = 'force-dynamic'
 
-  const options: GetCaptionsOptions = {
-    lang,
-    proxy: useProxy && {
-      host: proxyHost || '',
-      port: proxyPort ? parseInt(proxyPort) : 0,
-      protocol: 'http',
-      auth:
-        proxyUsername && proxyPassword
-          ? { username: proxyUsername, password: proxyPassword }
-          : undefined,
-    },
+export async function GET(req: NextRequest) {
+  const videoId = req.nextUrl.searchParams.get('videoId') || ''
+  const lang = req.nextUrl.searchParams.get('lang') || 'en'
+  if (!/^[\w-]{11}$/.test(videoId) || !/^[a-zA-Z0-9-]{1,20}$/.test(lang)) {
+    return NextResponse.json({ error: 'Invalid video ID or language' }, { status: 400 })
   }
-  try {
-    const captions = await getCaptions(videoId, options)
-    return NextResponse.json(captions)
-  } catch (error) {
-    console.error(error)
-    return NextResponse.json(error, { status: 500 })
-  }
+  const video = await getCaptions(videoId, { lang })
+  return NextResponse.json(video, { headers: { 'Cache-Control': 'no-store' } })
 }

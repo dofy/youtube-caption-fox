@@ -1,105 +1,48 @@
 # @dofy/youtube-caption-fox
 
-`@dofy/youtube-caption-fox` is a simple Node.js library for fetching YouTube video captions with ease. Whether you need to extract subtitles for processing, analysis, or translation, this package provides a straightforward API to retrieve captions in different languages.
-
-## Features
-
-- Fetch captions from YouTube videos by video ID
-- Support for multiple languages
-- Simple and easy-to-use API
-- Handles proxy configuration for restricted environments
+A Node.js library for retrieving YouTube captions and basic video information by video ID.
 
 ## Installation
-
-You can install the package using npm:
 
 ```bash
 npm install @dofy/youtube-caption-fox
 ```
 
+The npm release may differ from the code in this repository; the local demo uses the local build.
+
 ## Usage
 
-### Basic Usage
-
-Here's an example of how to use `@dofy/youtube-caption-fox` to fetch captions for a YouTube video:
-
-```javascript
+```js
 import { getCaptions } from '@dofy/youtube-caption-fox'
 
-const videoId = 'your-video-id'
-
-getCaptions(videoId)
-  .then(({ captions }) => {
-    console.log('Captions:', captions)
-  })
-  .catch((error) => {
-    console.error('Error fetching captions:', error)
-  })
+const video = await getCaptions('5I1jTJ9sYeA', { lang: 'en' })
+console.log(video.title)
+console.log(video.captions) // [{ start, dur, text }, ...]
 ```
 
-### Proxy Support
+`getCaptions(videoId, options)` returns an object containing `id`, `title`, `description`, `cover`, `publishDate`, and `captions`. Times are in seconds. `lang` defaults to `en`; if the requested language is unavailable, the first available track is used. It does not translate subtitles.
 
-If you are behind a proxy, you can configure the library to use it:
+You can pass `proxy: false` to disable a proxy, or configure one with `proxy: { host, port, protocol, auth: { username, password } }`. `protocol` and `auth` are optional.
 
-```javascript
-import { getCaptions } from '@dofy/youtube-caption-fox'
+When no caption track is available, the library returns an empty `captions` array. It also catches request errors, logs them, and returns empty metadata and captions, so an empty result does not distinguish missing captions from an upstream or network failure. YouTube access and caption availability can change.
 
-const videoId = 'your-video-id'
+## Local demo
 
-const options = {
-  proxy: {
-    host: 'proxy-server-address',
-    port: 8080,
-    protocol: 'http',
-    auth: {
-      username: 'your-username',
-      password: 'your-password',
-    },
-  },
-}
+The [demo](sample/README.md) accepts a YouTube URL or ID, lets you choose a language and search captions, and can copy or download the transcript. Timestamps link to the video.
 
-getCaptions(videoId, options)
-  .then(({ captions }) => {
-    console.log('Captions:', captions)
-  })
-  .catch((error) => {
-    console.error('Error fetching captions:', error)
-  })
+## Development
+
+Use Node.js 26 and pnpm 12 (the versions are recorded in `.nvmrc` and `packageManager`). From the repository root:
+
+```bash
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm build
+pnpm test --runInBand
+pnpm lint
 ```
 
-## API
-
-### `getCaptions(videoId, [options])`
-
-- **videoId** (String) - The ID of the YouTube video for which to fetch captions.
-- **options** (Object) - Optional. Configuration options, such as proxy settings.
-
-Returns a promise that resolves with the captions data or rejects with an error.
-
-## Example
-
-```javascript
-import { getCaptions } from '@dofy/youtube-caption-fox'
-
-const videoId = 'your-video-id'
-
-getCaptions(videoId)
-  .then(({ captions }) => {
-    console.log(captions) // Captions data in JSON format
-  })
-  .catch((error) => {
-    console.error(error)
-  })
-```
+The tests make live YouTube requests, including a direct request without a proxy, so they require appropriate network access. See the [demo instructions](sample/README.md) for running the UI.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-Contributions are welcome! Please submit a pull request or open an issue to discuss potential changes.
-
-## Issues
-
-If you encounter any issues or have feature requests, please feel free to [open an issue](https://github.com/dofy/youtube-caption-fox/issues) on GitHub.
+[MIT](LICENSE)
